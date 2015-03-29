@@ -8,7 +8,7 @@ namespace CompleteProject
         public int damagePerShot = 20;                  // The damage inflicted by each bullet.
         public float timeBetweenBullets = 0.15f;        // The time between each shot.
         public float range = 100f;                      // The distance the gun can fire.
-
+		public GameObject weaponBun;
 
         float timer;                                    // A timer to determine when to fire.
         Ray shootRay;                                   // A ray from the gun end forwards.
@@ -31,6 +31,8 @@ namespace CompleteProject
             gunLine = GetComponent <LineRenderer> ();
             gunAudio = GetComponent<AudioSource> ();
             gunLight = GetComponent<Light> ();
+			// weaponBun = GameObject.FindGameObjectWithTag ("Weapon").transform;
+
         }
 
 
@@ -77,6 +79,10 @@ namespace CompleteProject
         {
             // Reset the timer.
             timer = 0f;
+
+
+			Instantiate (weaponBun, transform.position, transform.rotation);
+
 
             // Play the gun shot audioclip.
             gunAudio.Play ();
