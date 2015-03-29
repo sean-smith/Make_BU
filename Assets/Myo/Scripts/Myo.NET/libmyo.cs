@@ -8,15 +8,8 @@ namespace Thalmic.Myo
 {
     internal static class libmyo
     {
-#if UNITY_STANDALONE || UNITY_EDITOR
-        private const string MYO_DLL = "myo";
-#elif UNITY_ANDROID
-        private const string MYO_DLL = "myo-android";
-#elif WIN64
-        private const string MYO_DLL = "myo64.dll";
-#elif WIN32
-        private const string MYO_DLL = "myo32.dll";
-#endif
+
+		private const string MYO_DLL = "myo.dll";
 
         public enum Result
         {

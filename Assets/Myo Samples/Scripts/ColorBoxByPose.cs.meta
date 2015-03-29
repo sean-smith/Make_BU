@@ -1,8 +1,14 @@
 fileFormatVersion: 2
 guid: e9f73c111e5a1436295869186e2e823f
+timeCreated: 1427583888
+licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - myo: {instanceID: 0}
+  - waveInMaterial: {fileID: 2100000, guid: beca7d66ce77b41769cf37f1a0f2c355, type: 2}
+  - waveOutMaterial: {fileID: 2100000, guid: 2481aef9b23ed4d869d5fb417a44fefd, type: 2}
+  - doubleTapMaterial: {fileID: 2100000, guid: 775c3bb66f6f34c638f9fbc4901950a4, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

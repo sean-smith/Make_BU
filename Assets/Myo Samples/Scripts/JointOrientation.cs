@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 using LockingPolicy = Thalmic.Myo.LockingPolicy;
 using Pose = Thalmic.Myo.Pose;
 using UnlockType = Thalmic.Myo.UnlockType;
 using VibrationType = Thalmic.Myo.VibrationType;
+using System;
+//using System.Diagnostics;
+using System.Threading;
 
 // Orient the object to match that of the Myo armband.
 // Compensate for initial yaw (orientation about the gravity vector) and roll (orientation about
@@ -15,6 +18,7 @@ public class JointOrientation : MonoBehaviour
     // Myo game object to connect with.
     // This object must have a ThalmicMyo script attached.
     public GameObject myo = null;
+	
 
     // A rotation that compensates for the Myo armband's orientation parallel to the ground, i.e. yaw.
     // Once set, the direction the Myo armband is facing becomes "forward" within the program.
@@ -25,28 +29,25 @@ public class JointOrientation : MonoBehaviour
     // Set by making the fingers spread pose or pressing "r".
     private float _referenceRoll = 0.0f;
 
+	private int timeElapsed = 100;
+	private int start = 0;
+
+	private float baseRoll = 500.0f;
+	
     // The pose from the last update. This is used to determine if the pose has changed
     // so that actions are only performed upon making them rather than every frame during
     // which they are active.
-    private Pose _lastPose = Pose.Unknown;
 
     // Update is called once per frame.
     void Update ()
     {
         // Access the ThalmicMyo component attached to the Myo object.
         ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo> ();
+		TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
 
         // Update references when the pose becomes fingers spread or the q key is pressed.
         bool updateReference = false;
-        if (thalmicMyo.pose != _lastPose) {
-            _lastPose = thalmicMyo.pose;
 
-            if (thalmicMyo.pose == Pose.FingersSpread) {
-                updateReference = true;
-
-                ExtendUnlockAndNotifyUserAction(thalmicMyo);
-            }
-        }
         if (Input.GetKeyDown ("r")) {
             updateReference = true;
         }
@@ -77,6 +78,24 @@ public class JointOrientation : MonoBehaviour
         // The relative roll is simply how much the current roll has changed relative to the reference roll.
         // adjustAngle simply keeps the resultant value within -180 to 180 degrees.
         float relativeRoll = normalizeAngle (roll - _referenceRoll);
+
+
+		//==============My Section, will vibrate if object is thrown =======================
+		float throwRoll = thalmicMyo.gyroscope.x;
+
+
+		int secondsSinceEpoch = (int)t.TotalSeconds;
+		timeElapsed = secondsSinceEpoch - start;
+
+		if (throwRoll > baseRoll && timeElapsed > 1) {
+			thalmicMyo.Vibrate (VibrationType.Medium);
+			ExtendUnlockAndNotifyUserAction (thalmicMyo);
+			Debug.Log ("Object Thrown");
+			start = secondsSinceEpoch;
+		} 
+
+		//==============My Section, will vibrate if object is thrown =======================
+
 
         // antiRoll represents a rotation about the myo Armband's forward axis adjusting for reference roll.
         Quaternion antiRoll = Quaternion.AngleAxis (relativeRoll, myo.transform.forward);
