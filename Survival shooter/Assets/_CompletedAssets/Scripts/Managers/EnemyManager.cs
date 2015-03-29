@@ -10,6 +10,7 @@ namespace CompleteProject
         public Transform[] spawnPoints;         // An array of the spawn points this enemy can spawn from.
 
 
+
         void Start ()
         {
             // Call the Spawn function after a delay of the spawnTime and then continue to call after the same amount of time.

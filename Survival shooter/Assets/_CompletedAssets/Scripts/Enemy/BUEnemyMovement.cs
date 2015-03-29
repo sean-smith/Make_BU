@@ -10,7 +10,8 @@ namespace CompleteProject
 		BUEnemyHealth enemyHealth;        // Reference to this enemy's health.
 		NavMeshAgent nav;               // Reference to the nav mesh agent.
 		
-		
+		// public Vector3 currentPlayerPos;
+
 		void Awake ()
 		{
 			// Set up the references.
@@ -18,6 +19,7 @@ namespace CompleteProject
 			playerHealth = player.GetComponent <PlayerHealth> ();
 			enemyHealth = GetComponent <BUEnemyHealth> ();
 			nav = GetComponent <NavMeshAgent> ();
+			// nav.SetDestination (currentPlayerPos);
 		}
 		
 		
@@ -29,9 +31,9 @@ namespace CompleteProject
 
 			if (enemyHealth.currentHealth > 0 && playerHealth.currentHealth > 0) {
 				// ... set the destination of the nav mesh agent to the player.
-				if(nav) {
-				nav.SetDestination (player.position);    
-				}
+				nav.SetDestination (player.position);
+				// currentPlayerPos = player.position;
+
 			} else {
 				nav.enabled = false;
 			}
